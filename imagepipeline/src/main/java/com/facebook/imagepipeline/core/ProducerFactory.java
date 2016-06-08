@@ -106,9 +106,9 @@ public class ProducerFactory {
       boolean decodeFileDescriptorEnabled,
       int forceSmallCacheThresholdBytes) {
     mForceSmallCacheThresholdBytes = forceSmallCacheThresholdBytes;
-    mContentResolver = context.getApplicationContext().getContentResolver();
-    mResources = context.getApplicationContext().getResources();
-    mAssetManager = context.getApplicationContext().getAssets();
+    mContentResolver = context.getContentResolver();
+    mResources = context.getResources();
+    mAssetManager = context.getAssets();
 
     mByteArrayPool = byteArrayPool;
     mImageDecoder = imageDecoder;

@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
+apply plugin: 'com.meizu.configer'
 
 project.group = GROUP
 version = VERSION_NAME
@@ -15,8 +16,10 @@ dependencies {
     compile "com.nineoldandroids:library:${NINEOLDANDROID_VERSION}"
     compile "com.android.support:support-v4:${SUPPORT_LIB_VERSION}"
     provided "javax.annotation:javax.annotation-api:${ANNOTATION_API_VERSION}"
-    compile project(':fbcore')
-    compile project(':imagepipeline-base')
+    //compile project(':fbcore')
+    //compile project(':imagepipeline-base')
+    compile "com.meizu.netcontactservice.fresco:fbcore:1.2"
+    compile "com.meizu.netcontactservice.fresco:imagepipeline-base:1.2"
 
     testCompile project(':imagepipeline-test')
     testCompile project(':imagepipeline-base-test')

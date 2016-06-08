@@ -1,13 +1,17 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.meizu.configer'
 
 project.group = GROUP
 version = VERSION_NAME
 
 dependencies {
     provided "com.google.code.findbugs:jsr305:${JSR_305_VERSION}"
-    compile project(':drawee')
-    compile project(':fbcore')
-    compile project(':imagepipeline')
+    compile "com.meizu.netcontactservice.fresco:fbcore:1.2"
+    compile "com.meizu.netcontactservice.fresco:drawee:1.2"
+    compile "com.meizu.netcontactservice.fresco:imagepipeline:1.2"
+    //compile project(':drawee')
+    //compile project(':fbcore')
+    //compile project(':imagepipeline')
 }
 apply from: rootProject.file('release.gradle')
 

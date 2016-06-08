@@ -243,7 +243,7 @@ public class DiskCacheConfig {
         mBaseDirectoryPathSupplier = new Supplier<File>() {
           @Override
           public File get() {
-            return mContext.getApplicationContext().getCacheDir();
+            return mContext.getCacheDir();
           }
         };
       }

@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
+apply plugin: 'com.meizu.configer'
 
 project.group = GROUP
 version = VERSION_NAME
@@ -9,7 +10,8 @@ dependencies {
     provided "com.google.code.findbugs:jsr305:${JSR_305_VERSION}"
     provided "javax.annotation:javax.annotation-api:${ANNOTATION_API_VERSION}"
 
-    compile project(':fbcore')
+    //compile project(':fbcore')
+    compile "com.meizu.netcontactservice.fresco:fbcore:1.2"
 
     testCompile "junit:junit:${JUNIT_VERSION}"
     testCompile "org.mockito:mockito-core:${MOCKITO_CORE_VERSION}"

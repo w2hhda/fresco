@@ -7,6 +7,9 @@
 // In order to upload jars to local maven repository run:
 //$ ./gradlew -P repositoryUrl=file://localhost/ uploadArchives
 
+// Gradle tasks for publishing to maven
+// 1) To install in local maven repo use :installArchives task
+// 2) To upload artifact to maven central use: :uploadArchives (you'd need to have the permission to do that)
 
 apply plugin: 'maven'
 apply plugin: 'signing'
@@ -36,6 +39,37 @@ if (hasProperty('askForPasswords')) {
     ext.'signing.password' = getPassword('signing password');
 }
 
+def configureReactNativePom(def pom) {
+    pom.project {
+        name POM_NAME
+        artifactId POM_ARTIFACT_ID
+        packaging POM_PACKAGING
+        description POM_DESCRIPTION
+        url 'https://github.com/facebook/fresco'
+
+        scm {
+            url 'https://github.com/facebook/fresco.git'
+            connection 'scm:git:https://github.com/facebook/fresco.git'
+            developerConnection 'scm:git:git@github.com:facebook/fresco.git'
+        }
+
+        licenses {
+            license {
+                name 'BSD License'
+                url 'https://github.com/facebook/fresco/blob/master/LICENSE'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'facebook'
+                name 'Facebook'
+            }
+        }
+    }
+}
+
 afterEvaluate { project ->
     version = VERSION_NAME
     group = GROUP
@@ -59,34 +93,18 @@ afterEvaluate { project ->
 
             }
 
-            pom.project {
-                name POM_NAME
-                artifactId POM_ARTIFACT_ID
-                packaging POM_PACKAGING
-                description POM_DESCRIPTION
-                url 'https://github.com/facebook/fresco'
-
-                scm {
-                    url 'https://github.com/facebook/fresco.git'
-                    connection 'scm:git:https://github.com/facebook/fresco.git'
-                    developerConnection 'scm:git:git@github.com:facebook/fresco.git'
-                }
-
-                licenses {
-                    license {
-                        name 'BSD License'
-                        url 'https://github.com/facebook/fresco/blob/master/LICENSE'
-                        distribution 'repo'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'facebook'
-                        name 'Facebook'
-                    }
-                }
-            }
+            configureReactNativePom pom
         }
     }
+
+    task installArchives(type: Upload) {
+        configuration = configurations.archives
+        repositories.mavenDeployer {
+            // ready to publish to npm
+            repository url: "file://${projectDir}/../fresco"
+
+            configureReactNativePom pom
+        }
+    }
+
 }
