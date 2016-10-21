@@ -6,9 +6,10 @@ version = VERSION_NAME
 
 dependencies {
     provided "com.google.code.findbugs:jsr305:${JSR_305_VERSION}"
-    compile "com.meizu.netcontactservice.fresco:fbcore:1.2"
-    compile "com.meizu.netcontactservice.fresco:drawee:1.2"
-    compile "com.meizu.netcontactservice.fresco:imagepipeline:1.2"
+    compile "com.meizu.netcontactservice.fresco.ex:drawee:${CMNF_VERSION2}"
+    compile "com.meizu.netcontactservice.fresco.ex:fbcore:${CMNF_VERSION2}"
+    compile "com.meizu.netcontactservice.fresco.ex:imagepipeline:${CMNF_VERSION2}"
+    //compile "com.meizu.netcontactservice.fresco:imagepipeline:1.2"
     //compile project(':drawee')
     //compile project(':fbcore')
     //compile project(':imagepipeline')

@@ -11,7 +11,7 @@ dependencies {
     provided "javax.annotation:javax.annotation-api:${ANNOTATION_API_VERSION}"
 
     //compile project(':fbcore')
-    compile "com.meizu.netcontactservice.fresco:fbcore:1.2"
+    compile "com.meizu.netcontactservice.fresco.ex:fbcore:${CMNF_VERSION2}"
 
     testCompile "junit:junit:${JUNIT_VERSION}"
     testCompile "org.mockito:mockito-core:${MOCKITO_CORE_VERSION}"

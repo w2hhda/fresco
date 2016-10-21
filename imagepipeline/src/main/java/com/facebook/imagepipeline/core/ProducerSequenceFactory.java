@@ -27,6 +27,7 @@ import com.facebook.imagepipeline.producers.BitmapMemoryCacheKeyMultiplexProduce
 import com.facebook.imagepipeline.producers.BitmapMemoryCacheProducer;
 import com.facebook.imagepipeline.producers.DecodeProducer;
 import com.facebook.imagepipeline.producers.EncodedMemoryCacheProducer;
+import com.facebook.imagepipeline.producers.LocalAndroidResourceFetchProducer;
 import com.facebook.imagepipeline.producers.LocalAssetFetchProducer;
 import com.facebook.imagepipeline.producers.LocalContentUriFetchProducer;
 import com.facebook.imagepipeline.producers.LocalFileFetchProducer;
@@ -44,6 +45,8 @@ import com.facebook.imagepipeline.producers.ThrottlingProducer;
 import com.facebook.imagepipeline.producers.ThumbnailBranchProducer;
 import com.facebook.imagepipeline.producers.ThumbnailProducer;
 import com.facebook.imagepipeline.request.ImageRequest;
+
+import static android.content.ContentResolver.SCHEME_ANDROID_RESOURCE;
 
 public class ProducerSequenceFactory {
   private static final int MAX_SIMULTANEOUS_FILE_FETCH_AND_RESIZE = 5;
@@ -65,6 +68,7 @@ public class ProducerSequenceFactory {
   @VisibleForTesting Producer<CloseableReference<CloseableImage>> mLocalVideoFileFetchSequence;
   @VisibleForTesting Producer<CloseableReference<CloseableImage>> mLocalContentUriFetchSequence;
   @VisibleForTesting Producer<CloseableReference<CloseableImage>> mLocalResourceFetchSequence;
+  @VisibleForTesting Producer<CloseableReference<CloseableImage>> mLocalAndroidResourceFetchSequence;
   @VisibleForTesting Producer<CloseableReference<CloseableImage>> mLocalAssetFetchSequence;
   @VisibleForTesting Producer<CloseableReference<CloseableImage>> mDataFetchSequence;
   @VisibleForTesting Map<
@@ -181,6 +185,8 @@ public class ProducerSequenceFactory {
       return getLocalResourceFetchSequence();
     } else if (UriUtil.isDataUri(uri)) {
       return getDataFetchSequence();
+    } else if (SCHEME_ANDROID_RESOURCE.equals(uri.getScheme())){
+      return getLocalAndroidResourceFetchSequence();
     } else {
       String uriString = uri.toString();
       if (uriString.length() > 30) {
@@ -330,6 +336,25 @@ public class ProducerSequenceFactory {
           newBitmapCacheGetToLocalTransformSequence(localResourceFetchProducer);
     }
     return mLocalResourceFetchSequence;
+  }
+
+  /**
+   * bitmap cache get ->
+   * background thread hand-off -> multiplex -> bitmap cache -> decode ->
+   * branch on separate images
+   *   -> exif resize and rotate -> exif thumbnail creation
+   *   -> local image resize and rotate -> add meta data producer -> multiplex -> encoded cache ->
+   *   (webp transcode) -> local resource fetch.
+   */
+  private synchronized Producer<CloseableReference<CloseableImage>>
+  getLocalAndroidResourceFetchSequence() {
+    if (mLocalAndroidResourceFetchSequence == null) {
+      LocalAndroidResourceFetchProducer localAndroidResourceFetchProducer =
+              mProducerFactory.newLocalAndroidResourceFetchProducer();
+      mLocalAndroidResourceFetchSequence =
+              newBitmapCacheGetToLocalTransformSequence(localAndroidResourceFetchProducer);
+    }
+    return mLocalAndroidResourceFetchSequence;
   }
 
   /**

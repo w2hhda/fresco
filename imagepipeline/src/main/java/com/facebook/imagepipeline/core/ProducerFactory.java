@@ -11,6 +11,7 @@ package com.facebook.imagepipeline.core;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 
@@ -37,6 +38,7 @@ import com.facebook.imagepipeline.producers.DecodeProducer;
 import com.facebook.imagepipeline.producers.DiskCacheProducer;
 import com.facebook.imagepipeline.producers.EncodedCacheKeyMultiplexProducer;
 import com.facebook.imagepipeline.producers.EncodedMemoryCacheProducer;
+import com.facebook.imagepipeline.producers.LocalAndroidResourceFetchProducer;
 import com.facebook.imagepipeline.producers.LocalAssetFetchProducer;
 import com.facebook.imagepipeline.producers.LocalContentUriFetchProducer;
 import com.facebook.imagepipeline.producers.LocalContentUriThumbnailFetchProducer;
@@ -64,6 +66,7 @@ public class ProducerFactory {
   private ContentResolver mContentResolver;
   private Resources mResources;
   private AssetManager mAssetManager;
+  private PackageManager mPackageManager;
 
   // Decode dependencies
   private final ByteArrayPool mByteArrayPool;
@@ -109,6 +112,7 @@ public class ProducerFactory {
     mContentResolver = context.getContentResolver();
     mResources = context.getResources();
     mAssetManager = context.getAssets();
+    mPackageManager = context.getPackageManager();
 
     mByteArrayPool = byteArrayPool;
     mImageDecoder = imageDecoder;
@@ -245,6 +249,14 @@ public class ProducerFactory {
         mPooledByteBufferFactory,
         mResources,
         mDecodeFileDescriptorEnabled);
+  }
+
+  public LocalAndroidResourceFetchProducer newLocalAndroidResourceFetchProducer() {
+    return new LocalAndroidResourceFetchProducer(
+            mExecutorSupplier.forLocalStorageRead(),
+            mPooledByteBufferFactory,
+            mPackageManager,
+            mDecodeFileDescriptorEnabled);
   }
 
   public LocalVideoThumbnailProducer newLocalVideoThumbnailProducer() {

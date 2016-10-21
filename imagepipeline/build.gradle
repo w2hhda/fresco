@@ -18,11 +18,11 @@ dependencies {
     provided "javax.annotation:javax.annotation-api:${ANNOTATION_API_VERSION}"
     //compile project(':fbcore')
     //compile project(':imagepipeline-base')
-    compile "com.meizu.netcontactservice.fresco:fbcore:1.2"
-    compile "com.meizu.netcontactservice.fresco:imagepipeline-base:1.2"
+    compile "com.meizu.netcontactservice.fresco.ex:fbcore:${CMNF_VERSION2}"
+    compile "com.meizu.netcontactservice.fresco.ex:imagepipeline-base:${CMNF_VERSION2}"
 
-    testCompile project(':imagepipeline-test')
-    testCompile project(':imagepipeline-base-test')
+    //testCompile project(':imagepipeline-test')
+    //testCompile project(':imagepipeline-base-test')
     testCompile "junit:junit:${JUNIT_VERSION}"
     testCompile "org.mockito:mockito-core:${MOCKITO_CORE_VERSION}"
     testCompile("org.powermock:powermock-api-mockito:${POWERMOCK_VERSION}") {

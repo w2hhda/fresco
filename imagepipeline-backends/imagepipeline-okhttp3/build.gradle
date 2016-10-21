@@ -1,13 +1,15 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.meizu.configer'
 
 project.group = GROUP
 version = VERSION_NAME
 
 dependencies {
   compile "com.squareup.okhttp3:okhttp:${OKHTTP3_VERSION}"
-
-  compile project(':fbcore')
-  compile project(':imagepipeline')
+  compile "com.meizu.netcontactservice.fresco.ex:fbcore:${CMNF_VERSION2}"
+  compile "com.meizu.netcontactservice.fresco.ex:imagepipeline:${CMNF_VERSION3}"
+  //compile project(':fbcore')
+  //compile project(':imagepipeline')
 }
 apply from: rootProject.file('release.gradle')
 
